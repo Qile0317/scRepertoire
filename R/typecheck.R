@@ -1,5 +1,15 @@
 # scRepertoire objects
 
+isLoadContigsOutput <- function(obj) {
+    (is.data.frame(obj) && "barcode" %in% colnames(obj)) ||
+        is.list(obj) &&
+        all(sapply(obj, is.data.frame)) &&
+        all(sapply(obj, function(x) all("barcode" %in% colnames(x))))
+}
+assertthat::on_failure(isLoadContigsOutput) <- function(call, env) {
+    paste0(deparse(call$obj), " is not an output of loadContigs")
+}
+
 isCombineContigsOutput <- function(obj) {
     is.list(obj) && all(sapply(obj, is.data.frame))
 }

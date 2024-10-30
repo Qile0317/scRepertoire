@@ -46,12 +46,11 @@ utils::globalVariables(c(
 #' @param filterNonproductive This option will allow for the removal of 
 #' nonproductive chains if the variable exists in the contig data. Default
 #' is set to TRUE to remove nonproductive contigs.
-#' 
-#' @importFrom assertthat assert_that is.flag
+#'
 #' @export
 #' @concept Loading_and_Processing_Contigs
 #' @return List of clones for individual cell barcodes
-#' 
+#'
 combineTCR <- function(input.data, 
                        samples = NULL, 
                        ID = NULL, 
@@ -61,12 +60,16 @@ combineTCR <- function(input.data,
                        filterNonproductive = TRUE) {
 
     # rudimentary input checking
-    assert_that(is.character(samples) || is.null(samples))
-    assert_that(is.character(ID) || is.null(ID))
-    assert_that(is.flag(removeNA))
-    assert_that(is.flag(removeMulti))
-    assert_that(is.flag(filterMulti))
-    
+    assert_that(
+        isLoadContigsOutput(input.data),
+        is.character(samples) || is.null(samples),
+        is.character(ID) || is.null(ID),
+        is.flag(removeNA),
+        is.flag(removeMulti),
+        is.flag(filterMulti),
+        is.flag(filterNonproductive)
+    )
+
     input.data <- .checkList(input.data)
     input.data <- .checkContigs(input.data)
     out <- NULL
@@ -211,14 +214,16 @@ combineBCR <- function(input.data,
       stop("combineBCR() requires the samples paramter for the calculation of edit distance.")
     }
 
-    # rudimentary input checking
-    assert_that(is.character(samples) || is.null(samples))
-    assert_that(is.character(ID) || is.null(ID))
-    assert_that(is.flag(call.related.clones))
-    assert_that(is.numeric(threshold))
-    assert_that(is.flag(removeNA))
-    assert_that(is.flag(removeMulti))
-    assert_that(is.flag(filterMulti))
+    assert_that(
+        isLoadContigsOutput(input.data),
+        is.character(samples) || is.null(samples),
+        is.character(ID) || is.null(ID),
+        is.flag(call.related.clones),
+        is.flag(removeNA),
+        is.flag(removeMulti),
+        is.flag(filterMulti),
+        is.flag(filterNonproductive)
+    )
 
     input.data <- .checkList(input.data)
     input.data <- .checkContigs(input.data)
